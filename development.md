@@ -99,3 +99,7 @@
 **2022-11-16**
 
 添加天气
+
+**2022-12-20**
+
+修复发布包缺少css问题 (https://vccolombo.github.io/blog/tsc-how-to-copy-non-typescript-files-when-building/)

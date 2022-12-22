@@ -12,8 +12,9 @@
     "rootDir": "./src",
     "esModuleInterop": true,
     //    "allowJs": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
     // 设置该属性允许引入第三方库的d.ts文件
+    "skipLibCheck": true
   },
   "types": [
     "cesium"
