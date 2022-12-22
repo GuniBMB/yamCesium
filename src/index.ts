@@ -103,3 +103,17 @@ skyBoxOnGround();
 import Weather from "./scene/weather/Weather";
 
 export { Weather };
+
+
+/**
+ * popup
+ */
+import Popup from "./plugins/popup/Popup";
+
+export { Popup };
+
+/**
+ * 3dtiles
+ */
+import Cesium3DTiles from "./model/Cesium3dTiles";
+export { Cesium3DTiles };
