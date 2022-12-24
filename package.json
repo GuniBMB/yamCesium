@@ -1,6 +1,6 @@
 {
   "name": "yam-cesium",
-  "version": "0.2.9",
+  "version": "0.2.8",
   "description": "cesium常用工具库",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -61,9 +61,11 @@
     "webpack-bundle-analyzer": "^4.5.0",
     "webpack-cli": "^4.10.0",
     "webpack-dev-server": "^4.10.0",
+    "cesium": "~1.91.0"
+  },
+  "dependencies": {
     "@turf/turf": "^6.5.0",
     "@types/kdbush": "^3.0.1",
-    "cesium": "~1.91.0",
     "heatmap-ts": "^0.0.5",
     "kdbush": "^3.0.0"
   }
