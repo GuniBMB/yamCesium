@@ -8,10 +8,8 @@ import {
   ClippingPlaneCollection,
   Color,
   Ellipsoid,
-  ImageBasedLighting,
   Matrix4,
-  ShadowMode,
-  SplitDirection
+  ShadowMode
 } from "cesium";
 import PublicMethod from "../plugins/lib/PublicMethod";
 import CesiumMethod from "../plugins/lib/CesiumMethod";
@@ -74,7 +72,6 @@ class Cesium3DTiles {
     ellipsoid?: Ellipsoid;
     pointCloudShading?: any;
     lightColor?: Cartesian3;
-    imageBasedLighting?: ImageBasedLighting;
     backFaceCulling?: boolean;
     enableShowOutline?: boolean;
     showOutline?: boolean;
@@ -84,7 +81,6 @@ class Cesium3DTiles {
     featureIdLabel?: string | number;
     instanceFeatureIdLabel?: string | number;
     showCreditsOnScreen?: boolean;
-    splitDirection?: SplitDirection;
     projectTo2D?: boolean;
     debugHeatmapTilePropertyName?: string;
     debugFreezeFrame?: boolean;
