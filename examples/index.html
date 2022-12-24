@@ -530,10 +530,10 @@
 
   // 3dTiles
   let tiles = new yamCesium.Cesium3DTiles(viewer);
-  tiles.add3dTiles({
+  let tileset = tiles.add3dTiles({
     url: "http://183.230.114.154:9010/newsmap202201/zsyc5/tileset.json",
   })
-
+  viewer.zoomTo(tileset);
 </script>
 </body>
 

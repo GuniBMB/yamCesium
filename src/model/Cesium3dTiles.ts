@@ -150,7 +150,7 @@ class Cesium3DTiles {
         let coordinate = CesiumMethod.cartesian3ToLngLat(tileset.boundingSphere.center);
         tileset.coordinate = coordinate;
         tileset.originParams.coordinate = coordinate;
-        return;
+        return tileset;
       }
       let promise = Cesium.sampleTerrainMostDetailed(terrain, positions);
 
