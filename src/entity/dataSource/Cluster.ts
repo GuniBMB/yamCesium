@@ -29,7 +29,9 @@ export default class Cluster {
      * @return {billboardCollection} 集合，可直接往集合里添加广告牌billboard，呈现在页面上
      */
     load(options: any = {}) {
-        let billboardCollection = new Cesium.BillboardCollection();
+        let billboardCollection = new Cesium.BillboardCollection({
+            scene: this._v.scene,
+        });
 
         if (Cesium.defined(this.myPrimitives)) {
             // this._v.scene.primitives.remove(this.myPrimitives);
