@@ -11,8 +11,12 @@ import * as Cesium from "cesium";
 export default class Cluster {
     _v: any = null;
     myPrimitives: any = null;
-    myPrimitiveCluster: any = null;
+    _myPrimitiveCluster: any = null;
     myBillboardCollection: any = null;
+
+    set myPrimitiveCluster(myPrimitiveCluster: any) {
+        this._myPrimitiveCluster = myPrimitiveCluster;
+    }
 
     constructor(viewer: any) {
       this._v = viewer;

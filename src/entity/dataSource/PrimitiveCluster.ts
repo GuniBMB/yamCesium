@@ -951,6 +951,7 @@ function createDeclutterCallback(primitiveCluster: any) {
 
             collection = neighborPoint.collection;
             collectionIndex = neighborPoint.index;
+            console.log(collection.get(collectionIndex));
             ids.push(collection.get(collectionIndex).id);
           }
         }
@@ -1001,7 +1002,8 @@ function createDeclutterCallback(primitiveCluster: any) {
 
       const clusterPosition = Cesium.Cartesian3.clone(item.position);
       numPoints = 1;
-      ids = [item.id];
+      // ids = [item.id];
+      ids = [item];
 
       for (j = 0; j < neighborLength; ++j) {
         neighborIndex = neighbors[j];
@@ -1027,7 +1029,8 @@ function createDeclutterCallback(primitiveCluster: any) {
           Cesium.BoundingRectangle.union(totalBBox, neighborBBox, totalBBox);
           ++numPoints;
 
-          ids.push(neighborItem.id);
+          // ids.push(neighborItem.id);
+          ids.push(neighborItem);
         }
       }
 
