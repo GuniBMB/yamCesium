@@ -1,4 +1,5 @@
-export default class PlotToolTip {
+
+class PlotToolTip {
   _frameDiv: HTMLElement;
   _div: HTMLElement;
   _title: HTMLElement;
@@ -35,3 +36,4 @@ export default class PlotToolTip {
     }
   }
 }
+export default PlotToolTip;

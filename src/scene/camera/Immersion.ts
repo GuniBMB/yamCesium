@@ -3,7 +3,7 @@ import * as events from "events";
 // @ts-ignore
 const Knockout = Cesium.knockout;
 
-export default class Immersion {
+class Immersion {
 
   /**
    * viewer
@@ -211,3 +211,4 @@ export default class Immersion {
     );
   }
 }
+export default Immersion;

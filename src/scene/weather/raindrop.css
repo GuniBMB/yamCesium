@@ -1,0 +1,109 @@
+
+:root {
+  --thunder-duration: 10s;
+  --thunder-delay: 5s;
+}
+
+#thunderstorm {
+  background-image: -webkit-linear-gradient(to bottom, #030420, #000000 70%);
+  background-image: -moz-linear-gradient(bottom, #030420, #000000 70%);
+  background-image: -o-linear-gradient(bottom, #030420, #000000 70%);
+  background-image: linear-gradient(to bottom, #030420, #000000 70%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  position: initial;
+  left: 50vh;
+  overflow: hidden;
+}
+
+#raindrop {
+  background-image: -webkit-linear-gradient(to bottom, #030420, #000000 70%);
+  background-image: -moz-linear-gradient(bottom, #030420, #000000 70%);
+  background-image: -o-linear-gradient(bottom, #030420, #000000 70%);
+  background-image: linear-gradient(to bottom, #030420, #000000 70%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  position: initial;
+  left: 50vh;
+  overflow: hidden;
+}
+
+#thunderstorm hr.thunder {
+  border: unset;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  animation-name: thunder;
+  animation-duration: var(--thunder-duration);
+  animation-timing-function: linear;
+  animation-delay: var(--thunder-delay);
+  animation-iteration-count: infinite;
+  z-index: 1;
+}
+
+#thunderstorm hr:not(.thunder) {
+  width: 0px;
+  border-color: transparent;
+  border-right-color: rgba(255, 255, 255, 0.7);
+  border-right-width: 20px;
+  position: absolute;
+  bottom: 100%;
+  transform-origin: 100% 50%;
+  animation-name: rain;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+#raindrop hr.raindrop {
+  border: unset;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  animation-name: raindrop;
+  animation-duration: var(--thunder-duration);
+  animation-timing-function: linear;
+  animation-delay: var(--thunder-delay);
+  animation-iteration-count: infinite;
+  z-index: 1;
+}
+
+#raindrop hr:not(.raindrop) {
+  width: 10px;
+  border-color: transparent;
+  border-right-color: rgba(255, 255, 255, 0.7);
+  border-right-width: 10px;
+  position: absolute;
+  bottom: 100%;
+  transform-origin: 100% 50%;
+  animation-name: rain;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes rain {
+  from {
+    transform: rotate(105deg) translateX(0);
+  }
+  to {
+    transform: rotate(105deg) translateX(calc(100vh + 30px));
+  }
+}
+
+@keyframes raindrop {
+  from {
+    transform: rotate(105deg) translateX(0);
+  }
+  to {
+    transform: rotate(105deg) translateX(calc(100vh + 30px));
+  }
+}
+
+

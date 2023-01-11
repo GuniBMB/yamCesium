@@ -2,7 +2,7 @@ import PlotToolTip from "./PlotToolTip";
 import * as Cesium from "cesium";
 import layer from "../../plugins/lib/layer/Layer";
 
-export default class PlotCircleDrawer {
+class PlotCircleDrawer {
   viewer: any;
   scene: any;
   clock: any;
@@ -612,3 +612,4 @@ export default class PlotCircleDrawer {
     }
   }
 }
+export default PlotCircleDrawer;

@@ -1,7 +1,7 @@
 import * as Cesium from "cesium";
 import CesiumMethod from "../../../plugins/lib/CesiumMethod";
 
-export default class MeasureTools {
+class MeasureTools {
   viewer: Cesium.Viewer;
   entityCollection: Cesium.Entity[] = [];
   dis: string = "0";
@@ -336,7 +336,7 @@ export default class MeasureTools {
           _this.entityCollection.splice(_this.entityCollection.indexOf(totalLabelEntity), 1);
 
           let b = _this.viewer.entities.remove(totalLabelEntity);
-            // _this.tempEntityCollection.push(totalLabelEntity);
+          // _this.tempEntityCollection.push(totalLabelEntity);
           if (b) {
             totalLabelEntity = _this.addLabel(firstCartesian, finalLengthText);
             _this.entityCollection.push(totalLabelEntity);
@@ -583,13 +583,13 @@ export default class MeasureTools {
     let createAreaLabel = function(coords: Array<Array<number>>) {
       let area = CesiumMethod.calcPolygonArea(coords).toFixed(2);
       let label = String(countAreaInCartesian3(polygon.path));
-      area = area.substr(0, area.indexOf(".", 0));
+      area = area.substring(0, area.indexOf(".", 0));
       let text;
       if (area.length < 6)
         text = area + "平方米";
       else {
-        area = String(area / 1000000);
-        area = area.substr(0, area.indexOf(".", 0) + 3);
+        area = String(+area / 1000000);
+        area = area.substring(0, area.indexOf(".", 0) + 3);
         text = area + "平方公里";
       }
       let res = CesiumMethod.countPolygonCenter(polygon.path);
@@ -854,3 +854,5 @@ export default class MeasureTools {
     return centerPoint;
   }
 }
+
+export default MeasureTools;

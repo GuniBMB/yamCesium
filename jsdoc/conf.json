@@ -1,0 +1,20 @@
+{
+  "tags": {
+    "allowUnknownTags": true
+  },
+  "plugins": [
+    "./jsdoc/cesiumTags"
+  ],
+  "templates": {
+    "cleverLinks": true,
+    "default": {
+      "outputSourceFiles": false
+    },
+    "sourceUrl": "https://github.com/Flashowing/yamCesium/tree/{version}/src/{filename}"
+  },
+  "opts": {
+    "destination": "docs",
+    "template": "./jsdoc/cesium_template",
+    "recurse": true
+  }
+}

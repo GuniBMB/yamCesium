@@ -9,7 +9,7 @@ import PlotAttackArrowDrawer from "./PlotAttackArrowDrawer";
 import PlotPincerArrowDrawer from "./PlotPincerArrowDrawer";
 import PlotStraightArrowDrawer from "./PlotStraightArrowDrawer";
 
-export default class PlotTracker {
+class PlotTracker {
   viewer: any;
   ctrArr: any = [];
   pointDrawer: PlotPointDrawer;
@@ -119,3 +119,5 @@ export default class PlotTracker {
     return this.straightArrowDrawer.startDrawStraightArrow(options);
   }
 }
+
+export default PlotTracker;

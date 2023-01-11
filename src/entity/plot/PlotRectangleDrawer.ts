@@ -2,7 +2,7 @@ import PlotToolTip from "./PlotToolTip";
 import * as Cesium from "cesium";
 import layer from "../../plugins/lib/layer/Layer";
 
-export default class PlotRectangleDrawer {
+class PlotRectangleDrawer {
   viewer: any;
   scene: any;
   clock: any;
@@ -460,3 +460,4 @@ export default class PlotRectangleDrawer {
     }
   }
 }
+export default PlotRectangleDrawer;

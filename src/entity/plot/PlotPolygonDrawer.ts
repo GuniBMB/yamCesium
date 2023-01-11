@@ -2,7 +2,7 @@ import PlotToolTip from "./PlotToolTip";
 import * as Cesium from "cesium";
 import layer from "../../plugins/lib/layer/Layer";
 
-export default class PlotPolygonDrawer {
+class PlotPolygonDrawer {
   viewer: any;
   scene: any;
   clock: any;
@@ -655,3 +655,4 @@ export default class PlotPolygonDrawer {
     _this.markers = {};
   }
 }
+export default PlotPolygonDrawer;

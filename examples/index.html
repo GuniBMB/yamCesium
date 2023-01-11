@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>初始化地球</title>
+  <link rel="stylesheet"
+        href="http://183.230.114.154:9010/map/staticResources/Cesium-1.85/Build/Cesium/Widgets/widgets.css" />
+  <script type="text/javascript"
+          src="http://183.230.114.154:9010/map/staticResources/Cesium-1.85/Build/Cesium/Cesium.js"></script>
+  <!-- 使用unpkg -->
+  <script src="./turf.min.js"></script>
+  <style>
+    html,
+    body,
+    #cesiumContainer {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    #tool {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 100;
+    }
+
+  </style>
+</head>
+
+<body>
+<div id="cesiumContainer">
+  <div id="tool">
+    <div>
+      <button id="shortcut">截屏</button>
+      <button id="immersion">沉浸式键盘控制</button>
+      <button id="firstPersonPerspective">第一人称</button>
+      <button id="hawkEye">鹰眼图</button>
+    </div>
+    <div>
+      <button id="drawPoint">绘制点</button>
+      <button id="drawPolyline">绘制折线</button>
+      <button id="drawPolygon">绘制多边形</button>
+      <button id="drawRectangle">绘制矩形</button>
+      <button id="drawCircle">绘制圆形</button>
+      <button id="drawAttackArrow">绘制攻击箭头</button>
+      <button id="drawPincerArrow">绘制钳击箭头</button>
+      <button id="drawStraightArrow">绘制直线箭头</button>
+      <button id="editShape">编辑图形</button>
+      <button id="moveShape">移动图形</button>
+    </div>
+    <div>
+      <button id="measurePosition">测量位置</button>
+      <button id="measureDistance">测量距离</button>
+      <button id="measureArea">测量面积</button>
+      <button id="clearMeasure">清除测量数据</button>
+    </div>
+    <div>
+      <button id="lightRain">小雨</button>
+      <button id="moderateRain">中雨</button>
+      <button id="heavyRain">大雨</button>
+      <button id="rainDrop">雨滴</button>
+      <button id="thunder">闪电</button>
+      <button id="snow">雪</button>
+      <button id="cloudy">多云</button>
+    </div>
+  </div>
+</div>
+<script src="../dist/build/yam.cesium.min.js"></script>
+<script>
+  // (function() {
+  Cesium.Ion.defaultAccessToken =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0YWJlYzNkNS0yY2M0LTQxZWQtOGZhNi05MjEzYmVmZGVkNTkiLCJpZCI6MzU1NTEsImlhdCI6MTYwNDYyNzY2NH0.JxhQQxEvJTrmeARILcywKaPoPEPjO1RlqL28CRjktx8";
+  const viewer = new Cesium.Viewer("cesiumContainer", {
+    animation: true,
+    timeline: true,
+    shouldAnimate: true,
+    contextOptions: {
+      webgl: {
+        //通过canvas.toDataURL()实现截图需要将该项设置为true
+        preserveDrawingBuffer: true
+      }
+    }
+    // terrainProvider: Cesium.createWorldTerrain()
+    // imageryProvider: new Cesium.TileMapServiceImageryProvider({
+    //   url: 'http://183.230.114.154:9010/map/staticResources/Cesium-1.85/Build/Cesium/Assets/Textures/NaturalEarthII/',
+    // })
+  });
+  // 加载卫星图
+  let imageryProvider = new Cesium.UrlTemplateImageryProvider({
+    url: "http://183.230.114.154:9010/statellite1/{z}/{x}/{y}.png",
+    rectangle: Cesium.Rectangle.fromDegrees(78.443464, 14.801562, 126.103033, 49.773957)
+  });
+  viewer.imageryLayers.addImageryProvider(imageryProvider);
+
+
+  viewer.scene.globe.depthTestAgainstTerrain = true; // 关闭地形深度检测
+
+  const yam = new yamCesium.Map(viewer);
+
+  // 汉化
+  yamCesium.CesiumZh.load();
+
+  let options = {};
+  // options.defaultResetView = Cesium.Rectangle.fromDegrees(78.443464, 14.801562, 126.103033, 49.773957);
+  options.defaultResetView = new Cesium.Cartographic(1.8439750668500852, 0.648469690572424, 4368466.038206122);
+
+  // 指北针
+  options.enableCompass = true;
+  // 缩放
+  options.enableZoomControls = true;
+  // 比例尺
+  options.enableDistanceLegend = true;
+  // 指南针外环
+  options.enableCompassOuterRing = true;
+  viewer.extend(yamCesium.viewerCesiumNavigationMixin, options);
+
+  document.querySelector("#shortcut").addEventListener("click", () => {
+    // 获取canvas
+    let canvas = viewer.scene.canvas;
+    //只需要定义图片的宽度（高度计算得到）
+    let imageWidth = window.innerWidth;
+    //保存（下载）图片
+    yamCesium.Canvas2Image.saveAsImage(canvas, imageWidth, imageWidth * canvas.height / canvas.width, "png", "截图");
+  });
+
+  document.querySelector("#immersion").addEventListener("click", () => {
+    yam.camera.immersion.viewModel.enabled = !yam.camera.immersion.viewModel.enabled;
+  });
+
+  document.querySelector("#firstPersonPerspective").addEventListener("click", () => {
+    yam.camera.immersion.viewModel.firstPersonPerspective = !yam.camera.immersion.viewModel.firstPersonPerspective;
+  });
+
+  document.querySelector("#hawkEye").addEventListener("click", () => {
+    yam.camera.hawkEye.viewModel.enabled = !yam.camera.hawkEye.viewModel.enabled;
+    // 销毁鹰眼图
+    // yam.camera.hawkEye.destroy();
+    console.log("鹰眼图Viewer对象：", yam.camera.hawkEye.hawkEyeMap);
+  });
+
+  // primitive聚合
+  viewer.scene.debugShowFramesPerSecond = true;
+  const cluster = new yamCesium.ClusterUtil(viewer);
+
+  const ellipsoid = viewer.scene.globe.ellipsoid;
+  let billboardCount = 1489;
+  // seneca
+  const centerLongitude = -1.385205433269729;
+  const centerLatitude = 0.6777926580888163;
+  const rectangleHalfSize = 0.5;
+  const e = new Cesium.Rectangle(
+    centerLongitude - rectangleHalfSize,
+    centerLatitude - rectangleHalfSize,
+    centerLongitude + rectangleHalfSize,
+    centerLatitude + rectangleHalfSize
+  );
+
+  var datasource = Cesium.Resource.fetchJson({
+    url: "./map.geojson"
+  });
+  let billboards;
+  datasource.then(jsonData => {
+    try {
+      billboards = cluster.load({
+        enabled: true,
+        delay: 1200,
+        pixelRange: 30,
+        customStyle: function(_, removeListener, primitiveCluster) {
+          if (Cesium.defined(removeListener)) {
+            removeListener();
+            removeListener = undefined;
+          } else {
+            removeListener = primitiveCluster.clusterEvent.addEventListener(
+              function(clusteredEntities, cluster) {
+                cluster.label.show = false;
+                cluster.billboard.show = true;
+                cluster.billboard.id = cluster.label.id;
+                cluster.billboard.verticalOrigin = Cesium.VerticalOrigin
+                  .BOTTOM;
+                /* 根据站点(参数)的数量给予对应的广告牌  */
+                // if (clusteredEntities.length >= 50) {
+                //     cluster.billboard.image = pin50;
+                // } else if (clusteredEntities.length >= 40) {
+                //     cluster.billboard.image = pin40;
+                // } else if (clusteredEntities.length >= 30) {
+                //     cluster.billboard.image = pin30;
+                // } else if (clusteredEntities.length >= 20) {
+                //     cluster.billboard.image = pin20;
+                // } else if (clusteredEntities.length >= 10) {
+                //     cluster.billboard.image = pin10;
+                // } else {
+                //     cluster.billboard.image =
+                //         singleDigitPins[clusteredEntities.length - 2];
+                // }
+                cluster.billboard.image = "./fatboy.jpg";
+                cluster.billboard.width = 38;
+                cluster.billboard.height = 38;
+              }
+            );
+          }
+          // force a re-cluster with the new styling
+          let pixelRange = primitiveCluster.pixelRange;
+          primitiveCluster.pixelRange = 0;
+          primitiveCluster.pixelRange = pixelRange;
+          _.myPrimitiveCluster = primitiveCluster;
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
+    let feature = jsonData.features;
+    const gridSize = Math.sqrt(billboardCount);
+    for (let y = 0; y < gridSize; ++y) {
+      for (let x = 0; x < gridSize; ++x) {
+        const longitude = Cesium.Math.lerp(
+          e.west,
+          e.east,
+          x / (gridSize - 1)
+        );
+        const latitude = Cesium.Math.lerp(
+          e.south,
+          e.north,
+          y / (gridSize - 1)
+        );
+        const position = new Cesium.Cartographic(
+          longitude,
+          latitude,
+          10000.0
+        );
+        // billboards.add({
+        //   image: "./fatboy.jpg",
+        //   scaleByDistance: new Cesium.NearFarScalar(1.5e2, 1, 1.5e7, 0.2),
+        //   width: 38, // default: undefined
+        //   height: 38, // default: undefined
+        //   position: ellipsoid.cartographicToCartesian(position)
+        // });
+      }
+    }
+  });
+
+  const plot = new yamCesium.Plot(viewer);
+  document.querySelector("#drawPoint").addEventListener("click", () => {
+    plot.drawPoint({
+      confirmHandler1: function() {
+        return new Promise((resolve, reject) => {
+          confirm("确定要添加吗？") ? resolve() : reject();
+        });
+      }
+    }).then((data) => {
+      // console.log(data);
+      console.log("绘制完成");
+    }).catch(() => {
+      console.log("取消添加");
+    });
+  });
+
+  document.querySelector("#drawPolyline").addEventListener("click", () => {
+    plot.drawPolyline({
+      confirmHandler1: function() {
+        return new Promise((resolve, reject) => {
+          confirm("确定要添加吗？") ? resolve() : reject();
+        });
+      }
+    }).then((data) => {
+      console.log(data);
+      console.log("绘制完成");
+    }).catch(() => {
+      console.log("取消添加");
+    });
+  });
+  document.querySelector("#drawPolygon").addEventListener("click", () => {
+    plot.drawPolygon({
+      confirmHandler1: function() {
+        return new Promise((resolve, reject) => {
+          confirm("确定要添加吗？") ? resolve() : reject();
+        });
+      }
+    }).then((data) => {
+      console.log(data);
+      console.log("绘制完成");
+    }).catch(() => {
+      console.log("取消添加");
+    });
+  });
+
+  document.querySelector("#drawCircle").addEventListener("click", () => {
+    plot.drawCircle({
+      confirmHandler1: function() {
+        return new Promise((resolve, reject) => {
+          confirm("确定要添加吗？") ? resolve() : reject();
+        });
+      }
+    }).then((data) => {
+      console.log(data);
+      console.log("绘制完成");
+    }).catch(() => {
+      console.log("取消添加");
+    });
+  });
+
+  document.querySelector("#drawRectangle").addEventListener("click", () => {
+    plot.drawRectangle({
+      confirmHandler1: function() {
+        return new Promise((resolve, reject) => {
+          confirm("确定要添加吗？") ? resolve() : reject();
+        });
+      }
+    }).then((data) => {
+      console.log(data);
+      console.log("绘制完成");
+    }).catch(() => {
+      console.log("取消添加");
+    });
+  });
+
+  document.querySelector("#drawAttackArrow").addEventListener("click", () => {
+    plot.drawAttackArrow({
+      confirmHandler1: function() {
+        return new Promise((resolve, reject) => {
+          confirm("确定要添加吗？") ? resolve() : reject();
+        });
+      }
+    }).then((data) => {
+      console.log(data);
+      console.log("绘制完成");
+    }).catch(() => {
+      console.log("取消添加");
+    });
+  });
+  document.querySelector("#drawPincerArrow").addEventListener("click", () => {
+    plot.drawPincerArrow({
+      confirmHandler1: function() {
+        return new Promise((resolve, reject) => {
+          confirm("确定要添加吗？") ? resolve() : reject();
+        });
+      }
+    }).then((data) => {
+      console.log(data);
+      console.log("绘制完成");
+    }).catch(() => {
+      console.log("取消添加");
+    });
+  });
+
+  document.querySelector("#drawStraightArrow").addEventListener("click", () => {
+    plot.drawStraightArrow({
+      confirmHandler1: function() {
+        return new Promise((resolve, reject) => {
+          confirm("确定要添加吗？") ? resolve() : reject();
+        });
+      }
+    }).then((data) => {
+      console.log(data);
+      console.log("绘制完成");
+    }).catch(() => {
+      console.log("取消添加");
+    });
+  });
+
+  document.querySelector("#editShape").addEventListener("click", () => {
+    plot.editShape().then((data) => {
+      console.log(data);
+      console.log("编辑成功");
+    }).catch(() => {
+      console.log("取消编辑");
+    });
+  });
+
+  // document.querySelector("#deleteShape").addEventListener("click", () => {
+  //   plot.deleteShape().then((data) => {
+  //     console.log(data);
+  //     console.log("删除成功");
+  //   }).catch(() => {
+  //     console.log("取消删除");
+  //   });
+  // });
+
+  document.querySelector("#moveShape").addEventListener("click", () => {
+    // plot.moveShape().then((data) => {
+    //   console.log(data);
+    //   console.log("移动成功");
+    // }).catch(() => {
+    //   console.log("取消移动");
+    // });
+    plot.moveDrawer.moveShape().then(entity => {
+      console.log(entity);
+      console.log("移动成功");
+    }).catch(() => {
+      console.log("取消移动");
+    });
+  });
+
+  const measureTool = new yamCesium.MeasureTools(viewer);
+
+  document.querySelector("#measurePosition").addEventListener("click", () => {
+    measureTool.viewModel.measurePointEnabled = !measureTool.viewModel.measurePointEnabled;
+  });
+
+  document.querySelector("#measureDistance").addEventListener("click", () => {
+    measureTool.viewModel.measureDistanceEnabled = !measureTool.viewModel.measureDistanceEnabled;
+  });
+  document.querySelector("#measureArea").addEventListener("click", () => {
+    measureTool.viewModel.measureAreaEnabled = !measureTool.viewModel.measureAreaEnabled;
+  });
+  document.querySelector("#clearMeasure").addEventListener("click", () => {
+    measureTool.destroy();
+  });
+  // })();
+
+  // 设置相机初始化显示视角
+  viewer.camera.setView({
+    destination: Cesium.Cartesian3.fromDegrees(106.39264248451848, 29.806932566541033, 1200),
+    orientation: {
+      heading: Cesium.Math.toRadians(0),
+      pitch: Cesium.Math.toRadians(-90),
+      roll: Cesium.Math.toRadians(0)
+    }
+  });
+
+  // 绕点旋转
+  let leftDownEvent = null, clockEvent = null;
+  const handler = new Cesium.ScreenSpaceEventHandler(viewer.canvas);
+  handler.setInputAction((event) => {
+    clearTimeout(leftDownEvent);
+    leftDownEvent = setTimeout(() => {
+      // 停止绕点旋转
+      yam.camera.stopAround();
+    }, 200);
+  }, Cesium.ScreenSpaceEventType.LEFT_DOWN);
+
+  handler.setInputAction((movement) => {
+    // 当双击时，取消单击事件
+    clearTimeout(leftDownEvent);
+    viewer.clock.onTick.removeEventListener(clockEvent);
+    const ray = viewer.camera.getPickRay(movement.position);
+    if (!ray) {
+      return;
+    }
+    const cartesian = viewer.scene.globe.pick(ray, viewer.scene);
+    if (!cartesian) {
+      return;
+    }
+    // 绕点旋转
+    yam.camera.flyAround(cartesian);
+  }, Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
+
+  // 圆扩散
+  new yamCesium.Effect.circleSpread({
+    viewer: viewer,
+    center: Cesium.Cartesian3.fromDegrees(106.39264248451848, 29.806932566541033, 1200),
+    color: Cesium.Color.RED.withAlpha(0.5),
+    radius: 500,
+    duration: 2000
+  });
+
+  // 雷达扫描
+  new yamCesium.Effect.radarScan({
+    viewer: viewer,
+    center: Cesium.Cartesian3.fromDegrees(106.39264248451848, 29.806932566541033, 1200),
+    color: Cesium.Color.GREEN.withAlpha(0.5),
+    radius: 500,
+    duration: 2000
+  });
+
+  let randomData = yamCesium.Effect.heatMap.randomData(1000);
+
+  new yamCesium.Effect.heatMap({
+    viewer: viewer,
+    rect: Cesium.Rectangle.fromDegrees(106.23981504570496, 29.640241208388307, 106.5416197281101, 29.871498171685833),
+    max: randomData.max,
+    data: randomData.data
+  });
+
+  // 天气
+  const weather = new yamCesium.Weather(viewer);
+  // 小雨
+  document.querySelector("#lightRain").addEventListener("click", () => {
+    weather.viewModel.lightRainEnabled = !weather.viewModel.lightRainEnabled;
+  });
+  // 中雨
+  document.querySelector("#moderateRain").addEventListener("click", () => {
+    weather.viewModel.moderateRainEnabled = !weather.viewModel.moderateRainEnabled;
+  });
+  // 大雨
+  document.querySelector("#heavyRain").addEventListener("click", () => {
+    weather.viewModel.heavyRainEnabled = !weather.viewModel.heavyRainEnabled;
+  });
+  // 雨滴
+  document.querySelector("#rainDrop").addEventListener("click", () => {
+    weather.viewModel.raindropEnabled = !weather.viewModel.raindropEnabled;
+  });
+  // 闪电
+  document.querySelector("#thunder").addEventListener("click", () => {
+    weather.viewModel.thunderEnabled = !weather.viewModel.thunderEnabled;
+  });
+  // 雪
+  document.querySelector("#snow").addEventListener("click", () => {
+    weather.viewModel.snowEnabled = !weather.viewModel.snowEnabled;
+  });
+  // 多云
+  document.querySelector("#cloudy").addEventListener("click", () => {
+    weather.loadSkybox({
+      positiveX: "http://222.178.182.14:18090/web/img/weather/cloudy/Right.jpg",
+      negativeX: "http://222.178.182.14:18090/web/img/weather/cloudy/Left.jpg",
+      positiveY: "http://222.178.182.14:18090/web/img/weather/cloudy/Front.jpg",
+      negativeY: "http://222.178.182.14:18090/web/img/weather/cloudy/Back.jpg",
+      positiveZ: "http://222.178.182.14:18090/web/img/weather/cloudy/Up.jpg",
+      negativeZ: "http://222.178.182.14:18090/web/img/weather/cloudy/Down.jpg"
+    })
+  });
+
+  // popup
+  new yamCesium.Popup(viewer, {
+    title: "标题1",
+    content: `<div>
+                    <p>经度：106.392387</p>
+                    <p>纬度：29.809682</p>
+                </div>`,
+    position: Cesium.Cartesian3.fromDegrees(106.392387, 29.809682),
+    closeCallback: () => {
+      console.log("关闭气泡1");
+    }
+  });
+
+  // 3dTiles
+  let tiles = new yamCesium.Cesium3DTiles(viewer);
+  let tileset = tiles.add3dTiles({
+    url: "http://183.230.114.154:9010/newsmap202201/zsyc5/tileset.json",
+  })
+  viewer.zoomTo(tileset);
+</script>
+</body>
+
+</html>

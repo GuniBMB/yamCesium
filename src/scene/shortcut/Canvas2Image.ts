@@ -1,4 +1,5 @@
 /**
+ * @class
  * covert canvas to image
  * and save the image file
  */

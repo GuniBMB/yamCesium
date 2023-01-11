@@ -3,7 +3,7 @@ import PlotToolTip from "./PlotToolTip";
 import { xp } from "./algorithm";
 import layer from "../../plugins/lib/layer/Layer";
 
-export default class PlotPincerArrowDrawer {
+class PlotPincerArrowDrawer {
   viewer: any;
   scene: any;
   clock: any;
@@ -602,3 +602,4 @@ export default class PlotPincerArrowDrawer {
     _this.markers = {};
   }
 }
+export default PlotPincerArrowDrawer;

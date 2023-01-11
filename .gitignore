@@ -1,10 +1,11 @@
 .idea
 node_modules
 .DS_Store
-dist
 dist-ssr
+docs
 *.local
-
+src/**/*.js
+src/**/*.d.ts
 # lock
 yarn.lock
 package-lock.json

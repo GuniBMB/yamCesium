@@ -18,17 +18,20 @@ import KDBush from 'kdbush'
  * @demo {@link https://sandcastle.cesium.com/index.html?src=Clustering.html|Cesium Sandcastle Clustering Demo}
  */
 interface primitiveCluster {
-  enabled: boolean;
-  pixelRange: number;
-  minimumClusterSize: number;
-  clusterBillboards: boolean;
-  clusterLabels: boolean;
-  clusterPoints: boolean;
-  show: boolean;
-  delay: number;
+  enabled?: boolean;
+  pixelRange?: number;
+  minimumClusterSize?: number;
+  clusterBillboards?: boolean;
+  clusterLabels?: boolean;
+  clusterPoints?: boolean;
+  show?: boolean;
+  delay?: number;
 }
 
-export default class PrimitiveCluster {
+/**
+ * @class PrimitiveCluster
+ */
+class PrimitiveCluster {
 
   _enabled = false;
   _pixelRange = 80;
@@ -59,16 +62,16 @@ export default class PrimitiveCluster {
   _pixelRangeDirty: boolean | undefined;
   _minimumClusterSizeDirty: boolean | undefined;
 
-  constructor(options: primitiveCluster) {
+  constructor(options?: primitiveCluster) {
     // @ts-ignore
     options = Cesium.defaultValue(options, Cesium.defaultValue.EMPTY_OBJECT);
 
-    this._enabled = Cesium.defaultValue(options.enabled, false);
-    this._pixelRange = Cesium.defaultValue(options.pixelRange, 80);
-    this._minimumClusterSize = Cesium.defaultValue(options.minimumClusterSize, 2);
-    this._clusterBillboards = Cesium.defaultValue(options.clusterBillboards, true);
-    this._clusterLabels = Cesium.defaultValue(options.clusterLabels, true);
-    this._clusterPoints = Cesium.defaultValue(options.clusterPoints, true);
+    this._enabled = Cesium.defaultValue(options?.enabled, false);
+    this._pixelRange = Cesium.defaultValue(options?.pixelRange, 80);
+    this._minimumClusterSize = Cesium.defaultValue(options?.minimumClusterSize, 2);
+    this._clusterBillboards = Cesium.defaultValue(options?.clusterBillboards, true);
+    this._clusterLabels = Cesium.defaultValue(options?.clusterLabels, true);
+    this._clusterPoints = Cesium.defaultValue(options?.clusterPoints, true);
 
     this._labelCollection = undefined;
     this._billboardCollection = undefined;
@@ -101,10 +104,10 @@ export default class PrimitiveCluster {
      * @type {Boolean}
      * @default true
      */
-    this.show = Cesium.defaultValue(options.show, true);
+    this.show = Cesium.defaultValue(options?.show, true);
 
     //1.PrimitiveCluster构造函数中添加_delay参数
-    this._delay = Cesium.defaultValue(options.delay, 800);
+    this._delay = Cesium.defaultValue(options?.delay, 800);
   }
 
   /**
@@ -899,7 +902,8 @@ function createDeclutterCallback(primitiveCluster: any) {
     let collection;
     let collectionIndex;
 
-    const index = new KDBush(points, getX, getY, 64, Int32Array);
+    // @ts-ignore
+    const index = new Cesium.kdbush(points, getX, getY, 64, Int32Array);
 
     if (currentHeight < previousHeight) {
       length = clusters.length;
@@ -1246,3 +1250,4 @@ function updateEnable(primitiveCluster: PrimitiveCluster) {
  *     cluster.label.text = entities.length.toLocaleString();
  * });
  */
+export default PrimitiveCluster

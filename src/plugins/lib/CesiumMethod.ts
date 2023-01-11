@@ -1,8 +1,9 @@
 // @ts-ignore
-const turf = window.turf;
+// const turf = window.turf;
+import * as turf from "@turf/turf";
 import * as Cesium from "cesium";
 
-export default class CesiumMethod {
+class CesiumMethod {
   viewer: Cesium.Viewer;
 
   constructor(viewer: Cesium.Viewer) {
@@ -110,11 +111,11 @@ export default class CesiumMethod {
     let terrain = this.viewer.scene.terrainProvider;
     let promise = Cesium.sampleTerrainMostDetailed(terrain, positions);
     // @ts-ignore
-    Cesium.when(promise, function(updatedPositions: Cesium.Cartesian3) {
-      callback(updatedPositions);
-    }).otherwise(function(error: any) {
-      console.log(error);
-    });
+    // Cesium.when(promise, function(updatedPositions: Cesium.Cartesian3) {
+    //   callback(updatedPositions);
+    // }).otherwise(function(error: any) {
+    //   console.log(error);
+    // });
   }
 
   /**
@@ -167,5 +168,53 @@ export default class CesiumMethod {
   static measureDistanceWithCartesian3(cartesian1: Cesium.Cartesian3, cartesian2: Cesium.Cartesian3) {
     return Cesium.Cartesian3.distance(cartesian1, cartesian2);
   }
+
+  static _computeCirclePolygon(positions: any) {
+    let _this = this;
+    try {
+      if (!positions || positions.length < 2) {
+        return null;
+      }
+      let cp = positions[0];
+      let r = _this._computeCircleRadius3D(positions);
+      return _this._computeCirclePolygon2(cp, r);
+    } catch (err) {
+      return null;
+    }
+  }
+
+  static _computeCirclePolygon2(center: any, radius: any) {
+    try {
+      if (!center || radius <= 0) {
+        return null;
+      }
+      // @ts-ignore
+      let cep = Cesium.EllipseGeometryLibrary.computeEllipsePositions({
+        center: center,
+        semiMajorAxis: radius,
+        semiMinorAxis: radius,
+        rotation: 0,
+        granularity: 0.005
+      }, false, true);
+      if (!cep || !cep.outerPositions) {
+        return null;
+      }
+      let pnts = Cesium.Cartesian3.unpackArray(cep.outerPositions);
+      pnts[pnts.length] = pnts[0];
+      return pnts;
+    } catch (err) {
+      return null;
+    }
+  }
+
+  static _computeCircleRadius3D(positions: any) {
+    let c1 = positions[0];
+    let c2 = positions[1];
+    let x = Math.pow(c1.x - c2.x, 2);
+    let y = Math.pow(c1.y - c2.y, 2);
+    let z = Math.pow(c1.z - c2.z, 2);
+    return Math.sqrt(x + y + z);
+  }
 }
 
+export default CesiumMethod;

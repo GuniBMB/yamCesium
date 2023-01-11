@@ -1,5 +1,6 @@
 const path = require("path");
 const pkg = require('./package.json');
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const {
@@ -11,6 +12,7 @@ ${pkg.name}
 ${pkg.description}
 @version v${pkg.version}
 (c) 2022 ${pkg.author}
+date: ${new Date().toLocaleString()}
 hash: [hash]
 `
 module.exports = {
@@ -19,7 +21,6 @@ module.exports = {
   },
   mode: "production", //'development' 、 'production'、'none'
   entry: "./src/index.ts",
-
   // devServer: {
   // 	open: true,
   // 	port: 8081,
@@ -29,7 +30,6 @@ module.exports = {
   // 	maxEntrypointSize: 10000000,
   // 	maxAssetSize: 30000000
   // },
-
   output: {
     library: 'yamCesium',
     // libraryExport: ['func', 'sum'],
@@ -39,24 +39,24 @@ module.exports = {
     // 输出的路径  是绝对路径(导入path模块) 这里是用node来做的
     path: path.resolve(__dirname, "dist"),
     // 输出的文件名称
-    filename: 'yam.cesium.min.js',
+    filename: 'build/yam.cesium.min.js',
     environment: {
       arrowFunction: false // 关闭webpack的箭头函数，可选
     }
   },
   externals: {
-    cesium: 'Cesium' // 打包时忽略掉Cesium
+    cesium: 'Cesium', // 打包时忽略掉Cesium
+    "@turf/turf": 'turf',
+    kdbush: "KDBush"
   },
   resolve: {
     extensions: [".ts", ".js", '.json']
   },
-
-
-
   plugins: [
     // new BundleAnalyzerPlugin(), // 查看打包文件大小
     new CleanWebpackPlugin(),
-    new webpack.BannerPlugin(banner)
+    new webpack.BannerPlugin(banner),
+    // new CopyWebpackPlugin({ patterns: [{ from: path.resolve(__dirname, "src"), to: './' }] }),
     // new HtmlWebpackPlugin({
     // 	title: 'TS测试',
     // 	template: './src/index.html'

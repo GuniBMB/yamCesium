@@ -11,8 +11,18 @@ const ELEC_URL =
 const CVA_URL =
   "https://webst{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}";
 
+interface AmapImageryProviderOptions extends Cesium.UrlTemplateImageryProvider.ConstructorOptions {
+  style?: string;
+  crs?: string;
+}
+
+/**
+ * @class
+ * @desc 高德地图图层
+ * @extends Cesium.UrlTemplateImageryProvider
+ */
 class AmapImageryProvider extends Cesium.UrlTemplateImageryProvider {
-  constructor(options: any = {}) {
+  constructor(options: AmapImageryProviderOptions) {
     options["url"] =
       options["url"]
         ? options["url"]

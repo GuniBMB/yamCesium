@@ -18,16 +18,11 @@ import TencentImageryProvider from "./imagery/tencent/TencentImageryProvider";
 import TdtImageryProvider from "./imagery/tdt/TdtImageryProvider";
 import GoogleImageryProvider from "./imagery/google/GoogleImageryProvider";
 
-// @ts-ignore
-Cesium.AmapImageryProvider = AmapImageryProvider;
-// @ts-ignore
-Cesium.BaiduImageryProvider = BaiduImageryProvider;
-// @ts-ignore
-Cesium.TencentImageryProvider = TencentImageryProvider;
-// @ts-ignore
-Cesium.TdtImageryProvider = TdtImageryProvider;
-// @ts-ignore
-Cesium.GoogleImageryProvider = GoogleImageryProvider;
+export { AmapImageryProvider };
+export { BaiduImageryProvider };
+export { TencentImageryProvider };
+export { TdtImageryProvider };
+export { GoogleImageryProvider };
 
 // 坐标转换工具
 import coordTransform from "./transform/CoordTransform";
@@ -41,7 +36,7 @@ import viewerCesiumNavigationMixin from "./plugins/navigation/viewerCesiumNaviga
 // export { CesiumNavigation };
 
 // @ts-ignore
-Cesium.viewerCesiumNavigationMixin = viewerCesiumNavigationMixin;
+export { viewerCesiumNavigationMixin };
 
 // 截屏
 export { Canvas2Image } from "./scene/shortcut/Canvas2Image";
@@ -69,11 +64,12 @@ import PrimitiveCluster from "./entity/dataSource/PrimitiveCluster";
 
 // @ts-ignore
 Cesium.PrimitiveCluster = PrimitiveCluster;
+// export { PrimitiveCluster };
 
 // 聚合工具类
-import Cluster from "./entity/dataSource/Cluster";
+import ClusterUtil from "./entity/dataSource/ClusterUtil";
 
-export { Cluster };
+export { ClusterUtil };
 
 // 绘制
 import PlotTracker from "./entity/plot/PlotTracker";
@@ -87,3 +83,37 @@ export { Plot };
 import MeasureTools from "./entity/plot/measure/MeasureTools";
 
 export { MeasureTools };
+
+import Effect from "./effect/Effect";
+
+/**
+ * 效果
+ */
+export { Effect };
+
+// import skyBoxOnGround from "SkyBoxOnGround.js";
+import skyBoxOnGround from "./scene/weather/SkyBoxOnGround";
+// const skyBoxOnGround = require("scene/weather/SkyBoxOnGround.js");
+// @ts-ignore
+// Cesium.skyBoxOnGround = skyBoxOnGround;
+skyBoxOnGround();
+/**
+ * 天气
+ */
+import Weather from "./scene/weather/Weather";
+
+export { Weather };
+
+
+/**
+ * popup
+ */
+import Popup from "./plugins/popup/Popup";
+
+export { Popup };
+
+/**
+ * 3dtiles
+ */
+import Cesium3DTiles from "./model/Cesium3dTiles";
+export { Cesium3DTiles };

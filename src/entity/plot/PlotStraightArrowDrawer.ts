@@ -3,7 +3,7 @@ import * as Cesium from "cesium";
 import { xp } from "./algorithm";
 import layer from "../../plugins/lib/layer/Layer";
 
-export default class PlotStraightArrowDrawer {
+class PlotStraightArrowDrawer {
   viewer: any;
   scene: any;
   clock: any;
@@ -534,3 +534,4 @@ export default class PlotStraightArrowDrawer {
     _this.markers = {};
   }
 }
+export default PlotStraightArrowDrawer;

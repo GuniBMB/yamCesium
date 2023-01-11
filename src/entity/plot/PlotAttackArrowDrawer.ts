@@ -3,7 +3,7 @@ import * as Cesium from "cesium";
 import { xp } from "./algorithm";
 import layer from "../../plugins/lib/layer/Layer";
 
-export default class PlotAttackArrowDrawer {
+class PlotAttackArrowDrawer {
   viewer: any;
   scene: any;
   clock: any;
@@ -559,3 +559,4 @@ export default class PlotAttackArrowDrawer {
   }
 
 }
+export default PlotAttackArrowDrawer;

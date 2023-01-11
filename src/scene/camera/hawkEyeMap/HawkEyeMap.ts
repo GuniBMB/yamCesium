@@ -4,7 +4,7 @@ import "./hawkEyeMap.css";
 // @ts-ignore
 const Knockout = Cesium.knockout;
 
-export default class HawkEyeMap {
+class HawkEyeMap {
   viewer: any;
   hawkEyeMap: any;
   viewModel = {
@@ -103,3 +103,5 @@ export default class HawkEyeMap {
     });
   }
 }
+
+export default HawkEyeMap;

@@ -1,12 +1,13 @@
 import * as Cesium from "cesium";
-import CesiumNavigation from './CesiumNavigation'
-import './styles/cesium-navigation.css'
+import CesiumNavigation from "./CesiumNavigation";
+import "./styles/cesium-navigation.css";
 
-var defined = Cesium.defined
-var defineProperties = Object.defineProperties
-var DeveloperError = Cesium.DeveloperError
+var defined = Cesium.defined;
+var defineProperties = Object.defineProperties;
+var DeveloperError = Cesium.DeveloperError;
 
 /**
+ * @class
  * A mixin which adds the Compass/Navigation widget to the Viewer widget.
  * Rather than being called directly, this function is normally passed as
  * a parameter to {@link Viewer#extend}, as shown in the example below.
@@ -23,27 +24,27 @@ var DeveloperError = Cesium.DeveloperError
  * var viewer = new Cesium.Viewer('cesiumContainer');
  * viewer.extend(viewerCesiumNavigationMixin);
  */
-function viewerCesiumNavigationMixin (viewer: any, options: any) {
+function viewerCesiumNavigationMixin(viewer: any, options: any) {
   if (!defined(viewer)) {
-    throw new DeveloperError('viewer is required.')
+    throw new DeveloperError("viewer is required.");
   }
 
-  var cesiumNavigation = init(viewer, options)
+  var cesiumNavigation = init(viewer, options);
 
-  cesiumNavigation.addOnDestroyListener((function (viewer) {
-    return function () {
-      delete viewer.cesiumNavigation
-    }
-  })(viewer))
+  cesiumNavigation.addOnDestroyListener((function(viewer) {
+    return function() {
+      delete viewer.cesiumNavigation;
+    };
+  })(viewer));
 
   defineProperties(viewer, {
     cesiumNavigation: {
       configurable: true,
-      get: function () {
-        return viewer.cesiumWidget.cesiumNavigation
+      get: function() {
+        return viewer.cesiumWidget.cesiumNavigation;
       }
     }
-  })
+  });
 }
 
 /**
@@ -51,36 +52,36 @@ function viewerCesiumNavigationMixin (viewer: any, options: any) {
  * @param {CesiumWidget} cesiumWidget The cesium widget instance.
  * @param {{}} options The options.
  */
-viewerCesiumNavigationMixin.mixinWidget = function (cesiumWidget: any, options: any) {
+viewerCesiumNavigationMixin.mixinWidget = function(cesiumWidget: any, options: any) {
   // @ts-ignore
-  return init.apply(undefined, arguments)
-}
+  return init.apply(undefined, arguments);
+};
 
 /**
  * @param {Viewer|CesiumWidget} viewerCesiumWidget The Viewer or CesiumWidget instance
  * @param {{}} options the options
  */
-var init = function (viewerCesiumWidget: any, options: any) {
-  var cesiumNavigation = new CesiumNavigation(viewerCesiumWidget, options)
+var init = function(viewerCesiumWidget: any, options: any) {
+  var cesiumNavigation = new CesiumNavigation(viewerCesiumWidget, options);
 
-  var cesiumWidget = defined(viewerCesiumWidget.cesiumWidget) ? viewerCesiumWidget.cesiumWidget : viewerCesiumWidget
+  var cesiumWidget = defined(viewerCesiumWidget.cesiumWidget) ? viewerCesiumWidget.cesiumWidget : viewerCesiumWidget;
 
   defineProperties(cesiumWidget, {
     cesiumNavigation: {
       configurable: true,
-      get: function () {
-        return cesiumNavigation
+      get: function() {
+        return cesiumNavigation;
       }
     }
-  })
+  });
 
-  cesiumNavigation.addOnDestroyListener((function (cesiumWidget) {
-    return function () {
-      delete cesiumWidget.cesiumNavigation
-    }
-  })(cesiumWidget))
+  cesiumNavigation.addOnDestroyListener((function(cesiumWidget) {
+    return function() {
+      delete cesiumWidget.cesiumNavigation;
+    };
+  })(cesiumWidget));
 
-  return cesiumNavigation
-}
+  return cesiumNavigation;
+};
 
-export default viewerCesiumNavigationMixin
+export default viewerCesiumNavigationMixin;
