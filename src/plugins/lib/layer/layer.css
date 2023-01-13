@@ -71,7 +71,7 @@
   cursor: pointer;
 }
 
-.yam-layer-btn a, .yam-layer-dialog .yam-layer-ico, a {
+.yam-layer-btn a, .yam-layer-dialog .yam-layer-ico a {
   display: inline-block;
   *display: inline;
   *zoom: 1;

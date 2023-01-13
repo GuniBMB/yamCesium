@@ -37,6 +37,10 @@ class ClusterUtil {
     return this._myPrimitiveCluster;
   }
 
+  set myPrimitiveCluster(myPrimitiveCluster: any) {
+    this._myPrimitiveCluster = myPrimitiveCluster;
+  }
+
   /**
    * @constant
    * @desc 广告牌集合(站点显示的内容数据)
@@ -54,7 +58,9 @@ class ClusterUtil {
     this._myPrimitives = this._viewer.scene.primitives.add(
       new Cesium.PrimitiveCollection()
     );
-    this._myBillboardCollection = new Cesium.BillboardCollection();
+    this._myBillboardCollection = new Cesium.BillboardCollection({
+      scene: this._viewer.scene,
+    });
 
     this._myPrimitiveCluster = new PrimitiveCluster();
   }
