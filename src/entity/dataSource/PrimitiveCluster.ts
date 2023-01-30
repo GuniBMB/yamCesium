@@ -951,7 +951,6 @@ function createDeclutterCallback(primitiveCluster: any) {
 
             collection = neighborPoint.collection;
             collectionIndex = neighborPoint.index;
-            console.log(collection.get(collectionIndex));
             ids.push(collection.get(collectionIndex).id);
           }
         }
