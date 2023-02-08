@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>初始化地球</title>
+  <link rel="stylesheet"
+        href="http://183.230.114.154:9010/map/staticResources/Cesium-1.85/Build/Cesium/Widgets/widgets.css" />
+  <script type="text/javascript"
+          src="http://183.230.114.154:9010/map/staticResources/Cesium-1.85/Build/Cesium/Cesium.js"></script>
+  <style>
+    html,
+    body,
+    #cesiumContainer {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+    }
+  </style>
+</head>
+
+<body>
+<div id="cesiumContainer"></div>
+<script>
+  Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0YWJlYzNkNS0yY2M0LTQxZWQtOGZhNi05MjEzYmVmZGVkNTkiLCJpZCI6MzU1NTEsImlhdCI6MTYwNDYyNzY2NH0.JxhQQxEvJTrmeARILcywKaPoPEPjO1RlqL28CRjktx8";
+  const viewer = new Cesium.Viewer("cesiumContainer");
+  // 加载卫星图
+  let matrixIds = ['EPSG:4326:0', 'EPSG:4326:1', 'EPSG:4326:2', 'EPSG:4326:3', 'EPSG:4326:4', 'EPSG:4326:5', 'EPSG:4326:6', 'EPSG:4326:7', 'EPSG:4326:8', 'EPSG:4326:9', 'EPSG:4326:10', 'EPSG:4326:11', 'EPSG:4326:12', 'EPSG:4326:13', 'EPSG:4326:14', 'EPSG:4326:15', 'EPSG:4326:16', 'EPSG:4326:17', 'EPSG:4326:18', 'EPSG:4326:19', 'EPSG:4326:20', 'EPSG:4326:21'];
+  let imageryProvider = new Cesium.WebMapTileServiceImageryProvider({
+    url: "http://localhost:7789/geoserver/gwc/service/wmts",
+    tilingScheme: new Cesium.GeographicTilingScheme(),
+    format: "image/png",
+    style: "",
+    layer: "sanwei:sanweibiaozhu",
+    tileMatrixSetID: "EPSG:4326",
+    tileMatrixLabels: matrixIds,
+    maximumLevel: 20,
+  });
+  viewer.imageryLayers.addImageryProvider(imageryProvider);
+  // 设置相机初始化显示视角
+  viewer.camera.setView({
+    destination: new Cesium.Cartesian3(-1585034.035988356, 5354293.308222749, 3185786.5837769937),
+    orientation: {
+      heading: Cesium.Math.toRadians(0),
+      pitch: Cesium.Math.toRadians(-90),
+      roll: Cesium.Math.toRadians(0)
+    }
+  });
+</script>
+</body>
+
+</html>

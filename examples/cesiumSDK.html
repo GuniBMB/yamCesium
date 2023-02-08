@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CesiumSDK</title>
+  <link rel="stylesheet"
+        href="http://183.230.114.154:9010/map/staticResources/Cesium-1.85/Build/Cesium/Widgets/widgets.css"/>
+<!--  <script type="text/javascript"-->
+<!--          src="http://183.230.114.154:9010/map/staticResources/Cesium-1.85/Build/CesiumUnminified/Cesium.js"></script>-->
+  <script type="text/javascript"
+          src="http://localhost:8079/Build/CesiumUnminified/Cesium.js"></script>
+  <style>
+    html,
+    body,
+    #cesiumContainer {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    #tool {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 100;
+    }
+
+  </style>
+</head>
+<body>
+<div id="cesiumContainer"></div>
+<script src="./CustomCesiumSDK.js"></script>
+<script>
+  Cesium.Ion.defaultAccessToken =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0YWJlYzNkNS0yY2M0LTQxZWQtOGZhNi05MjEzYmVmZGVkNTkiLCJpZCI6MzU1NTEsImlhdCI6MTYwNDYyNzY2NH0.JxhQQxEvJTrmeARILcywKaPoPEPjO1RlqL28CRjktx8";
+  const viewer = new Cesium.Viewer("cesiumContainer", {
+    animation: true,
+    timeline: true,
+    shouldAnimate: true,
+    contextOptions: {
+      webgl: {
+        //通过canvas.toDataURL()实现截图需要将该项设置为true
+        preserveDrawingBuffer: true
+      }
+    },
+  });
+
+  const wmsImageryProvider = new Cesium.WebMapServiceImageryProvider({
+    url: "http://localhost:7789/geoserver/sanwei/wms",
+    layers: "sanwei:gdp_geo_street_wtfs",
+    parameters: {
+      transparent: true, //务必设为true。否则不显示底图
+      format: "image/png",
+      srs: "EPSG:4326",
+    },
+  });
+  // viewer.imageryLayers.addImageryProvider(wmsImageryProvider);
+  let matrixIds = ['EPSG:4326:0', 'EPSG:4326:1', 'EPSG:4326:2', 'EPSG:4326:3', 'EPSG:4326:4', 'EPSG:4326:5', 'EPSG:4326:6', 'EPSG:4326:7', 'EPSG:4326:8', 'EPSG:4326:9', 'EPSG:4326:10', 'EPSG:4326:11', 'EPSG:4326:12', 'EPSG:4326:13', 'EPSG:4326:14', 'EPSG:4326:15', 'EPSG:4326:16', 'EPSG:4326:17', 'EPSG:4326:18', 'EPSG:4326:19', 'EPSG:4326:20', 'EPSG:4326:21'];
+
+  const wtms = new Cesium.WebMapTileServiceImageryProvider({
+    url: 'http://localhost:7789/geoserver/gwc/service/wmts/rest/sanwei:gdp_geo_street_wtfs/{style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}?format=image/png',
+    tilingScheme: new Cesium.GeographicTilingScheme(),
+    format: "image/png",
+    style: "",
+    // layer: "sanwei:sanweibiaozhu",
+    layer: "sanwei:gdp_geo_street_wtfs",
+    tileMatrixSetID: "EPSG:4326",
+    tileMatrixLabels: matrixIds,
+    maximumLevel: 20,
+  })
+  viewer.imageryLayers.addImageryProvider(wtms);
+
+  // Create a label collection with two labels
+  // var labels = viewer.scene.primitives.add(new Custom.LabelCollectionExt());
+  // // var labels = viewer.scene.primitives.add(new Cesium.LabelCollection());
+  // var label = labels.add({
+  //   position : Cesium.Cartesian3.fromDegrees(-91.478231,32.313575),
+  //   show : true,
+  //   text : 'hello world',
+  //   font : '30px sans-serif',
+  //   fillColor : Cesium.Color.WHITE,
+  //   outlineColor : Cesium.Color.BLACK,
+  //   outlineWidth : 1.0,
+  //   showBackground : false,
+  //   backgroundColor : new Cesium.Color(0.165, 0.165, 0.165, 0.8),
+  //   backgroundPadding : new Cesium.Cartesian2(7, 5),
+  //   style : Cesium.LabelStyle.FILL,
+  //   pixelOffset : Cesium.Cartesian2.ZERO,
+  //   eyeOffset : Cesium.Cartesian3.ZERO,
+  //   horizontalOrigin : Cesium.HorizontalOrigin.LEFT,
+  //   verticalOrigin : Cesium.VerticalOrigin.BASELINE,
+  //   scale : 1.0,
+  // });
+  // labels.add({
+  //   position : Cesium.Cartesian3.fromDegrees(-91.478231,32.313575),
+  //   text : 'Another label'
+  // });
+  let matrixIds1 = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'];
+
+  let imageryProvider = new Cesium.WebMapTileServiceImageryProvider({
+    url: "http://222.178.182.14:9010/wmts",
+    tilingScheme: new Cesium.GeographicTilingScheme(),
+    format: "image/jpeg",
+    style: "default",
+    layer: "img",
+    tileMatrixSetID: "c",
+    tileMatrixLabels: matrixIds1,
+    maximumLevel: 20,
+  });
+  // viewer.imageryLayers.addImageryProvider(imageryProvider);
+
+
+  // new Custom.LabelTileServiceImageryProvider(viewer, {
+  //   url: "http://localhost:7789/geoserver/gwc/service/wmts",
+  //   tilingScheme: new Cesium.GeographicTilingScheme(),
+  //   format: "image/png",
+  //   style: "",
+  //   layer: "sanwei:sanweibiaozhu",
+  //   tileMatrixSetID: "EPSG:4326",
+  //   tileMatrixLabels: matrixIds,
+  //   maximumLevel: 20,
+  // })
+
+  var times = Cesium.TimeIntervalCollection.fromIso8601({
+    iso8601: '2023-02-01T09:00:00/2023-02-28T23:00:05/P5S',
+    leadingInterval: true,
+    trailingInterval: true,
+    // isStartIncluded: true,
+    isStopIncluded: false,
+    // dataCallback: function (interval, index) {
+    //   console.log(interval.start);
+    //   // var time;
+    //   // if (index === 0) {
+    //   //   time = Cesium.JulianDate.toIso8601(interval.stop);
+    //   // } else {
+    //   //   time = Cesium.JulianDate.toIso8601(interval.start);
+    //   // }
+    //   return {
+    //     // Time: Cesium.JulianDate.toIso8601(interval.start)
+    //     Time: Cesium.JulianDate.toIso8601(Cesium.JulianDate.now())
+    //   };
+    // }
+  });
+  var labelProvider = new Custom.LabelTileServiceImageryProvider(viewer, {
+    // url: "http://localhost:7789/geoserver/gwc/service/wmts?tilematrix={tileMatrixLabels}&layer={layer}&style={style}&tilerow={tilerow}&tilecol={tilecol}&tilematrixset={tileMatrixSetID}&format={format}&service=WMTS&version=1.0.0&request=GetTile",
+    // url: "http://localhost:18080/geoStreetWtfs/wtfsList?x={x}&y={y}&z={z}&r=1000",
+    url: 'http://localhost:7789/geoserver/sanwei/wms',
+    tilingScheme: new Cesium.GeographicTilingScheme(),
+    format: "image/png",
+    style: "",
+    // layer: "sanwei:sanweibiaozhu",
+    layer: "sanwei:gdp_geo_street_wtfs",
+    tileMatrixSetID: "EPSG:4326",
+    tileMatrixLabels: matrixIds,
+    maximumLevel: 20,
+    clock: viewer.clock,
+    times: times
+  })
+  viewer.imageryLayers.addImageryProvider(labelProvider);
+
+  // var resource = new Cesium.Resource({
+  //   url: 'http://localhost:18080/geoStreetWtfs/wtfsList?x={x}&y={y}&z={z}&r=1000',
+  //   // proxy: new Cesium.DefaultProxy('/proxy/'),
+  //   headers: {
+  //     'X-My-Header': 'valueOfHeader'
+  //   },
+  //   templateValues: {
+  //     'x': '106.5',
+  //     'y': '29.5',
+  //     'z': '15'
+  //   },
+  //   retryCallback: () => {console.log('retryCallback')},
+  //   retryAttempts: 1
+  // });
+  // resource.fetch()
+  viewer.camera.setView({
+    destination: Cesium.Cartesian3.fromDegrees(106.393577, 29.806845, 10000.0),
+  });
+</script>
+</body>
+</html>
